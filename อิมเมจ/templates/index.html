@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Face & Gender Detection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="blob shape1"></div>
+        <div class="blob shape2"></div>
+        <div class="blob shape3"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fa-solid fa-face-smile-wink"></i>
+            <span>VisionAI</span>
+        </div>
+        <div class="nav-links">
+            <button class="nav-btn active" id="btn-home"><i class="fa-solid fa-house"></i> หน้าแรก</button>
+            <button class="nav-btn" id="btn-history"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติการใช้งาน</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Home Section -->
+        <section id="section-home" class="view-section active">
+            <header class="section-header">
+                <h1>ระบบตรวจจับใบหน้า & ระบุเพศ</h1>
+                <p>อัปโหลดรูปภาพเพื่อให้ AI วิเคราะห์ โครงข่ายประสาทลึก (RetinaFace & DeepFace) จะตรวจนับจำนวนใบหน้าและแยกเพศอย่างแม่นยำ</p>
+            </header>
+
+            <div class="glass-panel upload-panel" id="upload-panel">
+                <input type="file" id="image-input" accept=".jpg,.jpeg,.png,.webp" hidden>
+                <div class="upload-area" id="drop-zone">
+                    <div class="upload-content">
+                        <i class="fa-solid fa-cloud-arrow-up text-gradient"></i>
+                        <h3>ลากไฟล์ภาพมาที่นี่ หรือ <span>คลิกเพื่ออัปโหลด</span></h3>
+                        <p>รองรับ JPG, PNG, WEBP (สูงสุด 16MB)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="glass-panel loading-panel hidden" id="loading-panel">
+                <div class="loader">
+                    <div class="ring"></div>
+                    <div class="ring"></div>
+                    <div class="ring"></div>
+                </div>
+                <h3>AI กำลังวิเคราะห์รูปภาพ...</h3>
+                <p>อาจใช้เวลาสักครู่ ขึ้นอยู่กับความซับซ้อนและขนาดของไฟล์</p>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-container hidden" id="results-panel">
+                <div class="stats-row">
+                    <div class="stat-card glass-panel">
+                        <div class="stat-icon total"><i class="fa-solid fa-users"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">พบใบหน้า</span>
+                            <span class="stat-value" id="res-total">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-icon male"><i class="fa-solid fa-mars"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">ชาย</span>
+                            <span class="stat-value" id="res-male">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-icon female"><i class="fa-solid fa-venus"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">หญิง</span>
+                            <span class="stat-value" id="res-female">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="image-card glass-panel">
+                        <h4>รูปภาพต้นฉบับ</h4>
+                        <div class="img-wrapper">
+                            <img id="img-original" src="" alt="Original">
+                        </div>
+                    </div>
+                    <div class="image-card glass-panel">
+                        <h4>ผลลัพธ์การวิเคราะห์</h4>
+                        <div class="img-wrapper">
+                            <img id="img-processed" src="" alt="Processed">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-row">
+                    <button class="btn-primary" id="btn-analyze-new">
+                        <i class="fa-solid fa-rotate-right"></i> วิเคราะห์รูปใหม่
+                    </button>
+                    <a href="#" id="btn-download" class="btn-secondary" download="processed_image.jpg">
+                        <i class="fa-solid fa-download"></i> ดาวน์โหลดรูป
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section id="section-history" class="view-section">
+            <header class="section-header">
+                <h1>ประวัติการใช้งาน</h1>
+                <p>บันทึกการวิเคราะห์ภาพก่อนหน้าของคุณ (50 รายการล่าสุด)</p>
+            </header>
+
+            <div class="loading-history hidden" id="history-loader">
+                <i class="fa-solid fa-circle-notch fa-spin"></i> กำลังโหลดข้อมูล...
+            </div>
+            
+            <div class="history-grid" id="history-grid">
+                <!-- History Items will be injected here via JS -->
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
